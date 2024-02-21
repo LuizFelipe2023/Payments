@@ -24,12 +24,13 @@ class TransactionController extends Controller
     }
     public function store(Request $request){
         $request->validate([
-            'price' => 'required|numeric',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'date' => 'required|date',
             'method' => 'required|string'
         ]);
-    
+        $userId = auth()->user()->id;
         $transaction = Transaction::create([
+            'user_id' => $userId,
             'price' => $request->input('price'),
             'date' => $request->input('date'),
             'method' => $request->input('method')
